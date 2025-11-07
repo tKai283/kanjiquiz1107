@@ -1,0 +1,576 @@
+/* ==============================
+   🌐 全体スタイル
+============================== */
+.App {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #1a1f2b, #2d384a);
+  color: #fdfdfd;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* ❤️ ハート（Lives）を右上に固定表示 */
+.lives-container {
+  position: fixed;
+  top: 15px;
+  right: 25px;
+  font-size: 36px;
+  z-index: 1000;
+}
+
+/* === 背景Canvas === */
+.background-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  background: linear-gradient(to bottom, #0d3d5c 0%, #0a2d4d 50%, #052033 100%);
+  overflow: hidden;
+}
+
+/* ==============================
+ 🧠 クイズ画面デザイン
+============================== */
+.quiz-mode {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fdfdfd;
+  background: transparent;
+  text-align: center;
+}
+
+/* カード削除（背景なし） */
+.quiz-card {
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding: 0;
+}
+
+/* 🈶 問題の漢字 — 中央寄りに位置調整 */
+.question-text {
+  font-size: 88px;
+  font-weight: bold;
+  margin: 100px 0 40px;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 3px 3px 8px rgba(0, 0, 0, 0.9);
+  letter-spacing: 10px;
+  position: relative;
+  top: -40px; /* ← 画面中央へ寄せる */
+}
+
+/* 📝 入力欄 */
+.answer-input {
+  font-size: 28px;
+  padding: 14px 26px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  width: 75%;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.answer-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 🧩 ボタン */
+.button-group {
+  margin-top: 30px;
+}
+
+.main-btn {
+  font-size: 22px;
+  padding: 12px 30px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #ff9966, #ff5e62);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.3s;
+}
+
+.main-btn:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+.sub-btn,
+.giveup-btn {
+  font-size: 16px;
+  padding: 8px 18px;
+  margin: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.sub-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.sub-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.giveup-btn {
+  background: rgba(200, 200, 200, 0.2);
+  color: #ddd;
+}
+
+/* ==============================
+ 💀 Game Over 表示
+============================== */
+.result-message {
+  font-size: 42px;
+  font-weight: bold;
+  margin-top: 50px;
+  color: #ff5555;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.9),
+    2px 2px 10px rgba(0, 0, 0, 0.9);
+  animation: pulse 1.2s infinite alternate;
+}
+
+/* 白飛び防止 + ちらつく赤発光 */
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 6px rgba(255, 100, 100, 0.8);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 1);
+  }
+}
+
+/* ==============================
+ ❤️ ライフ固定位置
+============================== */
+.lives-container {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+}
+
+/* ==============================
+ 🧮 問題番号表示
+============================== */
+.question-count {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.7);
+}
+
+/* 🕓 待機画面（背景透過） */
+.wait-screen {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 40px 60px;
+  border-radius: 20px;
+  border: 2px solid #ffd700;
+  animation: fadeIn 0.5s ease;
+}
+
+.wait-screen h2 {
+  font-size: 36px;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+}
+
+.wait-screen p {
+  font-size: 18px;
+  color: #ddd;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==============================
+ 🎮 RPG風マップ式進行バー（左上コンパクト版）
+============================== */
+.map-progress {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "DotGothic16", sans-serif;
+  text-shadow: 0 0 4px #000;
+  z-index: 900;
+  transform: scale(0.85); /* ← 全体を少しコンパクトに */
+  transform-origin: top left;
+}
+
+.map-icon {
+  font-size: 1.4rem;
+  margin: 0 4px;
+}
+
+.map-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* 各ステップ（丸数字） */
+.map-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.step-circle {
+  width: 22px; /* ← 小型化 */
+  height: 22px;
+  background: #333;
+  border: 2px solid #666;
+  border-radius: 50%;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  background: radial-gradient(circle at center, #00ffcc 0%, #007777 100%);
+  border-color: #00ffcc;
+  color: #fff;
+  text-shadow: 0 0 4px #00ffee;
+  transform: scale(1.1);
+}
+
+/* 線（各数字の間） */
+.step-line {
+  width: 26px; /* ← 短く */
+  height: 3px;
+  background: #444;
+  margin: 0 3px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.step-line.filled {
+  background: linear-gradient(90deg, #00ffee, #00aa88);
+  box-shadow: 0 0 5px #00ffaa;
+}
+
+/* プレイヤーアイコン */
+.player-icon {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px; /* ← 小型化 */
+  animation: float 1.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -5px);
+  }
+}
+/* ==============================
+ 🏰🧍🐉 RPG進行バー（人が城の前に立つ ver）
+============================== */
+
+.map-progress {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  transform: scale(0.85);
+  transform-origin: top left;
+  z-index: 900;
+}
+
+/* バー全体 */
+.map-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+/* 各ステップ */
+.map-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 数字サークル */
+.step-circle {
+  width: 26px;
+  height: 26px;
+  background: #444;
+  border: 2px solid #666;
+  border-radius: 50%;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  background: radial-gradient(circle at center, #00ffcc 0%, #008888 100%);
+  border-color: #00ffcc;
+  color: #fff;
+  text-shadow: 0 0 4px #00ffee;
+  transform: scale(1.1);
+}
+
+/* 線 */
+.step-line {
+  width: 30px;
+  height: 4px;
+  background: #555;
+  margin: 0 4px;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.step-line.filled {
+  background: linear-gradient(90deg, #00ffee, #00aa88);
+  box-shadow: 0 0 6px #00ffaa;
+}
+
+/* ====== 各アイコン配置 ====== */
+
+/* 🏰 城：やや奥に配置（🧍より後ろ） */
+.castle-icon {
+  position: absolute;
+  top: -34px;
+  left: 0;
+  font-size: 22px;
+  z-index: 1;
+  opacity: 0.95;
+  animation: floatCastle 2s ease-in-out infinite;
+}
+
+/* 🧍 プレイヤー：城より手前、やや下に立たせる */
+.player-icon {
+  position: absolute;
+  top: -22px; /* ← 少し下げて前に立つ感じを出す */
+  left: 1px;
+  font-size: 20px;
+  z-index: 2; /* 🧍が手前 */
+  animation: float 1.8s ease-in-out infinite;
+}
+
+/* 🐉 ドラゴン（最後の数字の真上） */
+.dragon-icon {
+  position: absolute;
+  top: -38px;
+  font-size: 22px;
+  animation: floatDragon 1.8s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* 浮遊アニメーション */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes floatCastle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes floatDragon {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+/*ボタンｃｓｓ*/
+/* === サイドボタン共通 === */
+.side-btn {
+  position: fixed;
+  bottom: 40px;
+  font-family: "PixelMplus10", sans-serif;
+  font-size: 18px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 2px solid #d4af37;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(90deg, #3c2f1b, #6b4f2f);
+  text-shadow: 1px 1px 2px black;
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 100;
+}
+
+/* 左端配置（あきらめる） */
+.giveup-side {
+  left: 20px;
+  background: linear-gradient(90deg, #5c1e1e, #8b2e2e);
+}
+
+/* 右端配置（入れ替え） */
+.swap-side {
+  right: 20px;
+  background: linear-gradient(90deg, #3c2f1b, #6b4f2f);
+}
+
+/* 中央の「答える」ボタン */
+.center-answer-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.main-btn {
+  background: linear-gradient(90deg, #ff9966, #ff5e62);
+  border: 2px solid #ffd27f;
+  border-radius: 12px;
+  color: white;
+  padding: 12px 28px;
+  font-size: 20px;
+  font-family: "PixelMplus10", sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-shadow: 1px 1px 2px black;
+}
+
+/* ホバー演出 */
+.main-btn:hover,
+.side-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px gold;
+}
+
+/* 無効状態 */
+.side-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* === ローマ字警告メッセージ === */
+.warning-text {
+  color: #ffcc00;
+  font-size: 18px;
+  margin-top: 10px;
+  text-shadow: 0 0 6px rgba(255, 255, 0, 0.6);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+/* メッセージ表示 共通 */
+.message-default {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 10px;
+  color: white;
+  text-shadow: 0 0 5px black;
+}
+
+.message-warning {
+  color: #ffcc00;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+  text-shadow: 0 0 5px rgba(255, 204, 0, 0.8);
+}
+
+.message-success {
+  color: #00ff99;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 10px;
+  text-shadow: 0 0 8px rgba(0, 255, 153, 0.8);
+}
+
+.message-error {
+  color: #ff5555;
+  font-size: 22px;
+  text-align: center;
+  margin-top: 10px;
+  text-shadow: 0 0 8px rgba(255, 85, 85, 0.8);
+}
+
+.message-info {
+  color: #66ccff;
+  font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
+  text-shadow: 0 0 6px rgba(102, 204, 255, 0.8);
+}
+
+/* エラー（不正解） */
+.message-error {
+  font-size: 22px;
+  color: #ff5555;
+  text-shadow: 0 0 8px rgba(255, 85, 85, 0.8);
+  margin-top: 10px;
+}
